@@ -1,8 +1,11 @@
 import javax.swing.*;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Vector;
 
 public class Player extends JFrame {
 
@@ -25,32 +28,7 @@ public class Player extends JFrame {
         btnBrowse.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JFileChooser chooser = new JFileChooser();
-                chooser.setMultiSelectionEnabled(true);
-                int status = chooser.showOpenDialog(Player.this);
-
-                if (status == JFileChooser.APPROVE_OPTION) {
-                    File[] files = chooser.getSelectedFiles();
-                    for (File file : files) {
-                        System.out.println("Name: " + file.getName());
-                    }
-
-                    System.out.println(files.toString());
-
-                    DefaultTableModel defaultTableModel = (DefaultTableModel) tableSongs.getModel();
-                    defaultTableModel.setColumnIdentifiers(new String[]{ "Filenames"});
-
-                    Object[] row = new Object[1];
-
-                    for(int i=0;i<files.length; i++){
-                        row[0] = files[i].getName();
-                        defaultTableModel.addRow(row);
-                    }
-
-                    System.out.println("working");
-                } else {
-                    System.out.println("Cancelled");
-                }
+                browseFiles();
             }
 
         });
@@ -58,7 +36,7 @@ public class Player extends JFrame {
         btnAddFolderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                addFilesFromFolder();
             }
         });
 
@@ -70,5 +48,50 @@ public class Player extends JFrame {
             }
         });
     }
+
+    public void browseFiles() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setMultiSelectionEnabled(true);
+        int status = chooser.showOpenDialog(Player.this);
+
+        if (status == JFileChooser.APPROVE_OPTION) {
+            File[] files = chooser.getSelectedFiles();
+
+
+
+
+            DefaultTableModel tableModel = new DefaultTableModel();
+
+            tableModel.addColumn("Id");
+            tableModel.addColumn("Name");
+            tableModel.addColumn("Playing Time");
+
+            int i=0;
+            for (File file : files) {
+                System.out.println("Name: " + file.getName());
+                tableModel.addRow(new Object[]{++i, file.getName(), file.length()});
+            }
+
+
+
+            tableSongs.setModel(tableModel);
+
+
+
+
+
+
+
+
+        } else {
+            System.out.println("Cancelled");
+        }
+    }
+
+    public void addFilesFromFolder() {
+
+    }
+
+
 
 }
