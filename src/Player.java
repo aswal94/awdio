@@ -1,8 +1,13 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.ArrayList;
 
 public class Player extends JFrame {
 
@@ -13,6 +18,9 @@ public class Player extends JFrame {
     private JButton btnBrowse;
     private JButton btnAddFolderButton;
     private JTable table1;
+
+    ArrayList<Song> songsList = new ArrayList<>();
+
 
     public Player() {
 
@@ -40,7 +48,7 @@ public class Player extends JFrame {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //scrollPane.getSelectedRow();
+
 
             }
         });
@@ -61,16 +69,35 @@ public class Player extends JFrame {
             tableModel.addColumn("Name");
             tableModel.addColumn("Playing Time");
 
-            int i = 0;
+
             for (File file : files) {
                 System.out.println("Name: " + file.getName());
-                tableModel.addRow(new Object[]{++i, file.getName(), file.length()});
+                Song song = new Song();
+                song.setName(file.getName());
+                song.setPlayingTime(file.length());
+                songsList.add(song);
+                //tableModel.addRow(new Object[]{++i, song.getName(), song.getPlayingTime()});
+            }
+            int i = 0;
+            for (Song s : songsList) {
+                tableModel.addRow(new Object[]{++i, s.getName(), s.getPlayingTime()});
             }
 
 
             table1.setModel(tableModel);
 
+            table1.setDefaultEditor(Object.class, null);
 
+            table1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent listSelectionEvent) {
+                    System.out.println(table1.getValueAt(table1.getSelectedRow(), 0).toString());
+                    int x = Integer.parseInt(table1.getValueAt(table1.getSelectedRow(), 0).toString());
+                    System.out.println("x: " + x);
+
+                    System.out.println(songsList.get(x-1).getPlayingTime());
+                }
+            });
 
 
         } else {
