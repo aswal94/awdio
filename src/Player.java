@@ -1,11 +1,8 @@
 import javax.swing.*;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Vector;
 
 public class Player extends JFrame {
 
@@ -13,9 +10,9 @@ public class Player extends JFrame {
     private JButton previousButton;
     private JButton playButton;
     private JButton nextButton;
-    private JTable tableSongs;
     private JButton btnBrowse;
     private JButton btnAddFolderButton;
+    private JTable table1;
 
     public Player() {
 
@@ -43,7 +40,7 @@ public class Player extends JFrame {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                tableSongs.getSelectedRow();
+                //scrollPane.getSelectedRow();
 
             }
         });
@@ -58,27 +55,20 @@ public class Player extends JFrame {
             File[] files = chooser.getSelectedFiles();
 
 
-
-
             DefaultTableModel tableModel = new DefaultTableModel();
 
             tableModel.addColumn("Id");
             tableModel.addColumn("Name");
             tableModel.addColumn("Playing Time");
 
-            int i=0;
+            int i = 0;
             for (File file : files) {
                 System.out.println("Name: " + file.getName());
                 tableModel.addRow(new Object[]{++i, file.getName(), file.length()});
             }
 
 
-
-            tableSongs.setModel(tableModel);
-
-
-
-
+            table1.setModel(tableModel);
 
 
 
@@ -91,7 +81,6 @@ public class Player extends JFrame {
     public void addFilesFromFolder() {
 
     }
-
 
 
 }
